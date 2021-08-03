@@ -1,0 +1,64 @@
+version : '3'
+services:
+
+  phpfpm:
+    hostname: phpfpm
+    container_name: phpfpm
+    build: 
+      context: ./phpfpm
+      dockerfile: Dockerfile
+    networks:
+      - backend
+
+  web1:
+    hostname: web1
+    container_name: web1
+    build: 
+        context: ./web1
+        dockerfile: Dockerfile
+    depends_on:
+      - phpfpm
+    networks:
+      - backend
+
+  web2:
+    hostname: web2
+    container_name: web2
+    build: 
+        context: ./web2
+        dockerfile: Dockerfile
+    depends_on:
+      - phpfpm
+    networks:
+      - backend
+
+  web3:
+    hostname: web3
+    container_name: web3
+    build: 
+        context: ./web3
+        dockerfile: Dockerfile
+    depends_on:
+      - phpfpm
+    networks:
+      - backend
+
+  balancer:
+    hostname: balancer 
+    container_name: balancer
+    build: 
+      context: ./balancer
+      dockerfile: Dockerfile
+    depends_on:
+      - web1
+    ports:
+      - "80:80"
+    networks:
+      - backend
+      - frontend
+
+networks:
+    frontend:
+      driver: bridge
+    backend:
+      driver: bridge 
